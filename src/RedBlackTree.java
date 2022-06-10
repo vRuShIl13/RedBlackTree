@@ -24,7 +24,7 @@ public class RedBlackTree {
 
     //normal insert in a bst
     public void insert(int i, String v){
-        Node y = null;
+        Node y =  null;
         Node x = root;
 
         Node newNodeZ = new Node(i,v);
@@ -32,7 +32,7 @@ public class RedBlackTree {
         //finding the correct position where the newNode should be
         //looping down the tree
         while (x != null){
-            y=x;
+            y = x;
             if(i < x.getKey()){
                 x = x.getLeft();
             }else{
@@ -60,19 +60,55 @@ public class RedBlackTree {
         rbInsertFixup(newNodeZ);
     }
 
-
-    private void rbInsertFixup(Node z){
+    //fixing the tree after inserting a node, could have cause the property 2 or 4
+    private void rbInsertFixup(Node z) {
         Node y;
-        while(z.getpParent().getColor().equals("RED")){
-            if(z.getpParent() == z.getpParent().getpParent().getLeft()){
-               y = z.getpParent().getpParent().getRight();
+        while (z.getpParent().getColor().equals("RED")) {
+            if (z.getpParent() == z.getpParent().getpParent().getLeft()) {
+                y = z.getpParent().getpParent().getRight();
+
+                if (y.getColor().equals("RED")) {
+                    z.getpParent().setColor("BLACK");
+                    y.setColor("BLACK");
+                    z.getpParent().getpParent().setColor("RED");
+                    z = z.getpParent().getpParent();
+
+                } else {
+                    if (z == z.getpParent().getRight()) {
+                        z = z.getpParent();
+                        //leftRotate(z);
+                        z.getpParent().setColor("BLACK");
+                        z.getpParent().getpParent().setColor("RED");
+                        //rightRotate(z.getpParent().getpParent());
+                    }
+
+                }
+            } else {//for the 3 cases in the right
+                if (z.getpParent() == z.getpParent().getpParent().getRight()) {
+                    y = z.getpParent().getpParent().getLeft();
+
+                    if (y.getColor().equals("RED")) {
+                        z.getpParent().setColor("BLACK");
+                        y.setColor("BLACK");
+                        z.getpParent().getpParent().setColor("RED");
+                        z = z.getpParent().getpParent();
+
+                    } else {
+                        if (z == z.getpParent().getLeft()) {
+                            z = z.getpParent();
+                            //rightRotate(z);
+                            z.getpParent().setColor("BLACK");
+                            z.getpParent().getpParent().setColor("RED");
+                            //leftRotate(z.getpParent().getpParent());
+                        }
+                    }
+                }
             }
-
+            root.setColor("BLACK");
         }
-
     }
 
-
+    //LEFT Rotate
 
 
 }
