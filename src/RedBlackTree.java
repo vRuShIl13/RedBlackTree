@@ -209,4 +209,164 @@ public class RedBlackTree {
         System.out.println("The biggest key in the tree is :"+ maximum.getKey() + " and the value associated to it, is: "+ maximum.getValue()+ "\n");
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
+    //rank and select method
+    //size is the rank of the node.
+    // using the rank we can select a node.
+    public void select (int i){
+        Node curr = root;
+
+    }
+
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    //THis method replaces the sub tree rooted at U with the subtree rooted at V
+    public void rbTransplant(Node u, Node v){
+        if(u.getpParent()==null){
+            root = v;
+        }else if(u == u.getpParent().getLeft()){
+            u.getpParent().setLeft(v);
+        }else{
+            u.getpParent().setRight(v);
+        }
+        v.setpParent(u.getpParent());
+    }
+
+    //method that is used to delete a node normally from the bst
+    public void delete(int key){
+        Node tobeDeleted = null;
+        Node curr = root;
+        while(curr != null){
+            if(curr.getKey() == key){
+                tobeDeleted = curr;
+            }
+            if(curr.getKey()<= key){
+                curr = curr.getRight();
+            }else{
+                curr = curr.getLeft();
+            }
+        }
+
+        if(tobeDeleted == null){
+            System.out.println("key not found in the tree.");
+            return;
+        }
+        //node associated with the key is found and is sent to the rbdelete method to make sure the properties RBT are maintained.
+        rbDelete(tobeDeleted);
+
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    public void rbDelete(Node z){
+        Node x;
+        Node y = z;
+        String yColor = y.getColor();
+
+        if(z.getLeft() == null){
+            x = z.getRight();
+            rbTransplant(z,z.getRight());
+        }else if(z.getRight()==null){
+            x= z.getLeft();
+            rbTransplant(z,z.getLeft());
+        }else{
+            y = successor(z);
+            yColor = y.getColor();
+            x = y.getRight();
+            if(y.getpParent() == z){
+                x.setpParent(y);
+            }else{
+                rbTransplant(y,y.getRight());
+                y.setRight(z.getRight());
+                y.getRight().setpParent(y);
+            }
+            rbTransplant(z,y);
+            y.setLeft(z.getLeft());
+            y.getLeft().setpParent(y);
+            y.setColor(z.getColor());
+
+            if(yColor.equals("BLACK")){
+                rbDeleteFixUp(x);
+            }
+        }
+    }
+
+    //used to restore the red black tree after deleting a node.
+    private void rbDeleteFixUp(Node x) {
+        Node w;
+        while (x != root && x.getColor().equals("BLACK")){
+            if(x == x.getpParent().getLeft()){
+                w = x.getpParent().getRight();
+                if(w.getColor().equals("RED")) {
+                    w.setColor("BLACK");
+                    x.getpParent().setColor("RED");
+                    leftRotate(x.getpParent());
+                    w = x.getpParent().getRight();
+                }
+                if(w.getLeft().getColor().equals("BLACK") && w.getRight().getColor().equals("BLACK")){
+                    w.setColor("RED");
+                    x = x.getpParent();
+                }else{
+                    if(w.getRight().getColor().equals("BLACK")){
+                        w.getLeft().setColor("BLACK");
+                        w.setColor("RED");
+                        rightRotate(w);
+                        w = x.getpParent().getRight();
+                    }
+                    w.setColor(x.getpParent().getColor());
+                    x.getpParent().setColor("BLACK");
+                    w.getRight().setColor("BLACK");
+                    leftRotate(x.getpParent());
+                    x = root;
+
+                }
+            }else{
+                w = x.getpParent().getLeft();
+                if(w.getColor().equals("RED")) {
+                    w.setColor("BLACK");
+                    x.getpParent().setColor("RED");
+                    rightRotate(x.getpParent());
+                    w = x.getpParent().getLeft();
+                }
+                if(w.getRight().getColor().equals("BLACK") && w.getLeft().getColor().equals("BLACK")){
+                    w.setColor("RED");
+                    x = x.getpParent();
+                }else{
+                    if(w.getLeft().getColor().equals("BLACK")){
+                        w.getRight().setColor("BLACK");
+                        w.setColor("RED");
+                        leftRotate(w);
+                        w = x.getpParent().getLeft();
+                    }
+                    w.setColor(x.getpParent().getColor());
+                    x.getpParent().setColor("BLACK");
+                    w.getLeft().setColor("BLACK");
+                    rightRotate(x.getpParent());
+                    x = root;
+                }
+            }
+
+        }
+
+
+    }
+
+    //This method is used to find the successor of a node, this is used when the node is being deleted
+    public Node successor(Node origin) {
+        if (origin.getRight() != null) {
+            return minimumFromSuccessor(origin.getRight());
+        }
+
+        return null;
+    }
+
+    //Finding the succesor of a node using a while loop.
+    public Node minimumFromSuccessor(Node node) {
+        while (node.getLeft() != null) {
+            node = node.getLeft();
+        }
+        return node;
+    }
+
 }
