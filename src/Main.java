@@ -2,21 +2,30 @@
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
+	    // write your code here
         RedBlackTree sample = new RedBlackTree();
 
-        sample.insert(44, "Vrushil");
-        sample.insert(45, "Patel");
-        sample.insert(5, "Comp");
-        sample.insert(2, "3170");
-        sample.insert(87, "Computer");
-        sample.insert(75, "ground");
-        sample.insert(100, "the 100s");
+        sample.insert(1, "1");
+        sample.insert(3, "3");
+        sample.insert(5, "5");
+        sample.insert(7, "7");
+        sample.insert(9, "9");
+        sample.insert(11,"11");
 
+        sample.print();
 
-        sample.search(5);
-        sample.findMaximum();
         sample.findMinimum();
+        sample.findMaximum();
+
+        sample.delete(3);
+
+        //rank
+        //select
+
+        sample.search(11);
+        sample.print();
+
+
     }
 
 }

@@ -19,8 +19,13 @@ public class RedBlackTree {
 
     //constructor
     public RedBlackTree() {
-        root = null;
-        nil = null;
+
+        nil = new Node();
+        nil.setLeft(null);
+        nil.setRight(null);
+        nil.setColor("BLACK");
+        root = nil;
+
         minimum = null;
         maximum = null;
     }
@@ -36,7 +41,7 @@ public class RedBlackTree {
 
         //finding the correct position where the newNode should be
         //looping down the tree
-        while (x != null){
+        while (x != nil){
             y = x;
             if(i < x.getKey()){
                 x = x.getLeft();
@@ -66,14 +71,14 @@ public class RedBlackTree {
             maximum = newNodeZ;
         }
 
-
         //the node is just created, so it doesnt have any left or right children
         //according to the laws of red black trees, a new node must be coloured red.
-        newNodeZ.setLeft(null);
-        newNodeZ.setRight(null);
+        newNodeZ.setLeft(nil);
+        newNodeZ.setRight(nil);
         newNodeZ.setColor("RED");
 
         rbInsertFixup(newNodeZ);
+        System.out.println("value = "+ newNodeZ.getValue());
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -95,10 +100,10 @@ public class RedBlackTree {
                     if (z == z.getpParent().getRight()) {
                         z = z.getpParent();
                         leftRotate(z);
-                        z.getpParent().setColor("BLACK");
-                        z.getpParent().getpParent().setColor("RED");
-                        rightRotate(z.getpParent().getpParent());
                     }
+                    z.getpParent().setColor("BLACK");
+                    z.getpParent().getpParent().setColor("RED");
+                    rightRotate(z.getpParent().getpParent());
 
                 }
             } else {//for the 3 cases in the right
@@ -115,10 +120,11 @@ public class RedBlackTree {
                         if (z == z.getpParent().getLeft()) {
                             z = z.getpParent();
                             rightRotate(z);
-                            z.getpParent().setColor("BLACK");
-                            z.getpParent().getpParent().setColor("RED");
-                            leftRotate(z.getpParent().getpParent());
                         }
+                        z.getpParent().setColor("BLACK");
+                        z.getpParent().getpParent().setColor("RED");
+                        leftRotate(z.getpParent().getpParent());
+
                     }
                 }
             }
@@ -155,7 +161,7 @@ public class RedBlackTree {
         Node y = x.getLeft();
         x.setLeft(y.getRight());
 
-        if(y.getRight() != null){
+        if(y.getRight() != nil){
             y.getRight().setpParent(x);
         }
         y.setpParent(x.getpParent());
@@ -191,13 +197,12 @@ public class RedBlackTree {
 
     }
 
-
     //------------------------------------------------------------------------------------------------------------------
     //finding the minimum value node in the tree in constant time
     //this can be made possible by augmenting the tree.
     //maintaining a min pointer that will keep track of the smallest key.
     public void findMinimum(){
-        System.out.println("The smallest key in the tree is :"+ minimum.getKey() + " and the value associated to it, is: "+ minimum.getValue() + "\n");
+        System.out.println("\nThe smallest key in the tree is :"+ minimum.getKey() + " and the value associated to it, is: "+ minimum.getValue() + "\n");
     }
 
 
@@ -211,17 +216,6 @@ public class RedBlackTree {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    //rank and select method
-    //size is the rank of the node.
-    // using the rank we can select a node.
-    public void select (int i){
-        Node curr = root;
-
-    }
-
-
-
-    //------------------------------------------------------------------------------------------------------------------
     //THis method replaces the sub tree rooted at U with the subtree rooted at V
     public void rbTransplant(Node u, Node v){
         if(u.getpParent()==null){
@@ -231,14 +225,16 @@ public class RedBlackTree {
         }else{
             u.getpParent().setRight(v);
         }
+        System.out.println("how many times");
+
         v.setpParent(u.getpParent());
     }
-
+    //------------------------------------------------------------------------------------------------------------------
     //method that is used to delete a node normally from the bst
     public void delete(int key){
         Node tobeDeleted = null;
         Node curr = root;
-        while(curr != null){
+        while(curr != nil){
             if(curr.getKey() == key){
                 tobeDeleted = curr;
             }
@@ -253,7 +249,7 @@ public class RedBlackTree {
             System.out.println("key not found in the tree.");
             return;
         }
-        //node associated with the key is found and is sent to the rbdelete method to make sure the properties RBT are maintained.
+        //node associated with the key is found and is sent to the rb-delete method to make sure the properties RBT are maintained.
         rbDelete(tobeDeleted);
 
     }
@@ -261,22 +257,24 @@ public class RedBlackTree {
     //------------------------------------------------------------------------------------------------------------------
     public void rbDelete(Node z){
         Node x;
-        Node y = z;
-        String yColor = y.getColor();
+        Node y = z ;
+        String yColor = y.getColor() ;
 
-        if(z.getLeft() == null){
+        if(z.getLeft() == nil){
             x = z.getRight();
             rbTransplant(z,z.getRight());
-        }else if(z.getRight()==null){
+        }else if(z.getRight()==nil){
             x= z.getLeft();
             rbTransplant(z,z.getLeft());
         }else{
             y = successor(z);
+            System.out.println(y.getValue());
             yColor = y.getColor();
             x = y.getRight();
             if(y.getpParent() == z){
                 x.setpParent(y);
             }else{
+
                 rbTransplant(y,y.getRight());
                 y.setRight(z.getRight());
                 y.getRight().setpParent(y);
@@ -285,13 +283,12 @@ public class RedBlackTree {
             y.setLeft(z.getLeft());
             y.getLeft().setpParent(y);
             y.setColor(z.getColor());
-
-            if(yColor.equals("BLACK")){
-                rbDeleteFixUp(x);
-            }
+        }
+        if(yColor.equals("BLACK")){
+            rbDeleteFixUp(x);
         }
     }
-
+    //------------------------------------------------------------------------------------------------------------------
     //used to restore the red black tree after deleting a node.
     private void rbDeleteFixUp(Node x) {
         Node w;
@@ -348,25 +345,68 @@ public class RedBlackTree {
             }
 
         }
-
-
+        x.setColor("BLACK");
     }
-
+    //------------------------------------------------------------------------------------------------------------------
     //This method is used to find the successor of a node, this is used when the node is being deleted
     public Node successor(Node origin) {
         if (origin.getRight() != null) {
             return minimumFromSuccessor(origin.getRight());
         }
+        Node orgParent = origin.getpParent();
+        while(orgParent!=null && origin == orgParent.getRight()){
+            origin = orgParent;
+            orgParent = orgParent.getpParent();
+        }
 
-        return null;
+        return orgParent;
     }
-
+    //------------------------------------------------------------------------------------------------------------------
     //Finding the succesor of a node using a while loop.
     public Node minimumFromSuccessor(Node node) {
-        while (node.getLeft() != null) {
+        while (node.getLeft() != nil) {
             node = node.getLeft();
         }
         return node;
     }
+    //------------------------------------------------------------------------------------------------------------------
+    //rank and select method
+    //size is the rank of the node.
+    // using the rank we can select a node.
+    public void select (int i){
+        Node curr = root;
+
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // this method is used to print the values of all the nodes in the trees.
+    public void print() {
+        Node curr = root;
+        System.out.print("\nContents of the tree: ");
+        System.out.print("{ ");
+        treeTraversal(curr);
+        System.out.print("}\n");
+
+    }
+
+    //traversing the inorder.
+    public void treeTraversal(Node curr){
+
+        if(curr!=nil){
+            treeTraversal(curr.getLeft());
+            System.out.print(curr.getValue()+ " ");
+            treeTraversal(curr.getRight());
+        }
+
+
+    }
+
+
+    //This method is used to ensure that all the properties of a bst and red-black trees hold
+    public void validate(){
+
+    }
+
+
 
 }

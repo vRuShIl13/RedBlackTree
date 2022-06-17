@@ -21,13 +21,6 @@ public class Node {
 
     //skeleton constructor
     public Node() {
-        value = "";
-        key= -1;
-        color = "";
-        right = null;
-        left = null;
-        pParent= null;
-
     }
 
     //second constructor
