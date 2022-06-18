@@ -24,6 +24,7 @@ public class RedBlackTree {
         nil.setLeft(null);
         nil.setRight(null);
         nil.setColor("BLACK");
+        nil.setSize(0);
         root = nil;
 
         minimum = null;
@@ -225,7 +226,6 @@ public class RedBlackTree {
         }else{
             u.getpParent().setRight(v);
         }
-        System.out.println("how many times");
 
         v.setpParent(u.getpParent());
     }
@@ -268,7 +268,6 @@ public class RedBlackTree {
             rbTransplant(z,z.getLeft());
         }else{
             y = successor(z);
-            System.out.println(y.getValue());
             yColor = y.getColor();
             x = y.getRight();
             if(y.getpParent() == z){
@@ -369,14 +368,6 @@ public class RedBlackTree {
         }
         return node;
     }
-    //------------------------------------------------------------------------------------------------------------------
-    //rank and select method
-    //size is the rank of the node.
-    // using the rank we can select a node.
-    public void select (int i){
-        Node curr = root;
-
-    }
 
     //------------------------------------------------------------------------------------------------------------------
     // this method is used to print the values of all the nodes in the trees.
@@ -388,7 +379,7 @@ public class RedBlackTree {
         System.out.print("}\n");
 
     }
-
+    //------------------------------------------------------------------------------------------------------------------
     //traversing the inorder.
     public void treeTraversal(Node curr){
 
@@ -397,16 +388,59 @@ public class RedBlackTree {
             System.out.print(curr.getValue()+ " ");
             treeTraversal(curr.getRight());
         }
-
-
     }
 
-
+    //------------------------------------------------------------------------------------------------------------------
     //This method is used to ensure that all the properties of a bst and red-black trees hold
     public void validate(){
 
     }
 
+    //for testing purposes only
+    //------------------------------------------------------------------------------------------------------------------
+    public Node getRoot() {
+        return root;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    //rank and select method
+    //size is the rank of the node.
+    // using the rank we can select a node.
+    public void select (int i){
+        String selected = selectP(i, root);
+
+        System.out.println("The key selected is "+ i + "th rank and the value associated to it, is: "+ selected);
+    }
+
+    private String selectP(int i , Node curr){
+        System.out.println(this.sizeOfSubtree(curr.getLeft()));
+        curr.getLeft().setSize(this.sizeOfSubtree(curr.getLeft()));
+        System.out.println(i);
 
 
+        if(i == curr.getLeft().getSize()){
+            return curr.getValue();
+        }else if(i<curr.getLeft().getSize()){
+            return selectP(i, curr.getLeft());
+        }else{
+            return selectP(i-curr.getLeft().getSize()-1, curr.getRight());
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    //this method is used to find the size of the subtree of the curr node / count the number of nodes beneath + 1
+    public int sizeOfSubtree(Node curr){
+        return countSize(curr);
+    }
+    //recursively counts the number of nodes in the subtree of the curr node.
+    private int countSize(Node curr){
+        if(curr == nil){
+            return 0;
+        }
+        int leftBranch = countSize(curr.getLeft());
+        int rightBranch = countSize(curr.getRight());
+        return leftBranch+rightBranch+1;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
 }

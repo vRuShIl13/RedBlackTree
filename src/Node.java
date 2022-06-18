@@ -18,9 +18,12 @@ public class Node {
     private Node left;
     private Node pParent;
 
+    private int size; //subtree nodes
+
 
     //skeleton constructor
     public Node() {
+
     }
 
     //second constructor
@@ -94,6 +97,14 @@ public class Node {
 
     public void setpParent(Node pParent) {
         this.pParent = pParent;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 
     //=========================================================================================================

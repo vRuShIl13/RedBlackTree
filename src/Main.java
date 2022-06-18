@@ -12,6 +12,7 @@ public class Main {
         sample.insert(9, "9");
         sample.insert(11,"11");
 
+
         sample.print();
 
         sample.findMinimum();
@@ -19,12 +20,12 @@ public class Main {
 
         sample.delete(3);
 
-        //rank
-        //select
+
+        sample.select(0);
+
 
         sample.search(11);
         sample.print();
-
 
     }
 
